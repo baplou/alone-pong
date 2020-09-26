@@ -93,12 +93,12 @@ class Game:
 
         if self.collide(self.bar_x, self.duck_x, self.bar_y, self.duck_y, self.bar_mask, self.duck_mask) and self.counter2 >= 60:
             self.counter2 = 0
+            if self.duck_vel < 0:
+                constant = -2
+            else:
+                constant = 2
             if self.bar_direction == "up":
                 self.duck_direction = "sideways"
-                if self.duck_vel < 0:
-                    constant = -2
-                else:
-                    constant = 2
                 if self.bar_x >= self.duck_x - 8:
                     self.duck_vel = -2
                 elif self.bar_x <= self.duck_x:
