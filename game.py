@@ -91,9 +91,14 @@ class Game:
             self.bar_mask = pygame.mask.from_surface(self.bar)
             self.counter = 0
 
-        if self.collide(self.bar_x, self.duck_x, self.bar_y, self.duck_y, self.bar_mask, self.duck_mask) and self.counter2 >= 20:
+        if self.collide(self.bar_x, self.duck_x, self.bar_y, self.duck_y, self.bar_mask, self.duck_mask) and self.counter2 >= 60:
+            self.counter2 = 0
             if self.bar_direction == "up":
                 self.duck_direction = "sideways"
+                if self.duck_vel < 0:
+                    constant = -2
+                else:
+                    constant = 2
                 if self.bar_x >= self.duck_x - 8:
                     self.duck_vel = -2
                 elif self.bar_x <= self.duck_x:
@@ -104,14 +109,20 @@ class Game:
                     self.duck_vel = -2
                 elif self.bar_y <= self.duck_y:
                     self.duck_vel = 2
+            if self.duck_vel != constant:
+                self.score += 1
 
         if self.duck_direction == "sideways":
             self.duck_x += self.duck_vel
         elif self.duck_direction == "up":
             self.duck_y += self.duck_vel
 
+        self.main_font = pygame.font.SysFont("comicsans", 50)
+        self.score_label = self.main_font.render(f"Score: {str(self.score)}", 1, (255,255,255))
+
         self.screen.blit(self.duck,(self.duck_x,self.duck_y))
         self.screen.blit(self.bar,(self.bar_x,self.bar_y))
+        self.screen.blit(self.score_label,(800 - self.score_label.get_width() - 10, 10))
 
         if self.duck_x >= 800 or self.duck_x <= 0 or self.duck_y >= 800 or self.duck_y <= 0:
             self.game_active = False
